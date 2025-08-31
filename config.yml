@@ -14,7 +14,7 @@ engines:
       Hash: 4096                           # Max memory (in megabytes) the engine can allocate.
       Move Overhead: 250                  # Increase if your bot flags games too often.
     limits:                               # Limits that end the move calculation early.
-      time: 0.7                           # Max time per move in seconds.
+      time: 1.2                           # Max time per move in seconds.
 #      depth: 26                           # Max depth per move.
 #      nodes: 4000000                      # Max nodes per move.
   variants:                               # Engine used for variants when no suitable special engine is configured.
@@ -99,16 +99,16 @@ opening_books:
     standard_white_tournament:
       selection: best_move
       names:
-#        - DefaultBook
-        - fast
-        - fastest
+        - strongest
+        - DefaultBook
         - BackupBook
 
     standard_black_tournament:
       selection: best_move
       names:
+        - strongest
         - BlackBook
-        - fastest
+
 
     chess960_white:
       selection: best_move
@@ -306,9 +306,8 @@ books:                                    # Names of the opening books (to be us
   Chess960: "./engines/chess960.bin"
   Anti: "./engines/anti_book.bin"
   crazy: "./engines/crazyhouse_book.bin"
-  fast: "./engines/fastquick.bin"
-  fastest: "./engines/fastest.bin"
   horde: "./engines/horde_book.bin"
   atomic: "./engines/atomic_book.bin"
   whitekingofhill: "./engines/whitekingofhill.bin"
   blackkingofhill: "./engines/blackkingofhill.bin"
+  strongest: "./engines/tournament.bin"
