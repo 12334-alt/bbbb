@@ -101,12 +101,14 @@ opening_books:
       names:
 #        - DefaultBook
         - fast
+        - fastest
         - BackupBook
 
     standard_black_tournament:
       selection: best_move
       names:
         - BlackBook
+        - fastest
 
     chess960_white:
       selection: best_move
@@ -305,6 +307,7 @@ books:                                    # Names of the opening books (to be us
   Anti: "./engines/anti_book.bin"
   crazy: "./engines/crazyhouse_book.bin"
   fast: "./engines/fastquick.bin"
+  fastest: "./engines/fastest.bin"
   horde: "./engines/horde_book.bin"
   atomic: "./engines/atomic_book.bin"
   whitekingofhill: "./engines/whitekingofhill.bin"
