@@ -137,10 +137,51 @@ class Lichess_Game:
 
     async def make_move(self) -> Lichess_Move:
         for move_source in self.move_sources:
-            if move_response := await move_source():
-                break
-        else:
-            move, info = await self.engine.make_move(self.board, *self.engine_times)
+            move_response = await move_source()
+            if not move_response:
+                continue
+
+            if move_response.public_message.startswith("Book:"):
+                self.board.push(move_response.move)
+                print(f'{move_response.public_message} {move_response.private_message}'.strip())
+                self.last_message = move_response.public_message
+                self.last_pv = move_response.pv
+                return Lichess_Move(
+                    move_response.move.uci(),
+                    self._offer_draw(move_response),
+                    self._resign(move_response)
+                )
+
+            self.board.push(move_response.move)
+            if not move_response.is_engine_move:
+                await self.engine.start_pondering(self.board)
+
+            print(f'{move_response.public_message} {move_response.private_message}'.strip())
+            self.last_message = move_response.public_message
+            self.last_pv = move_response.pv
+            return Lichess_Move(
+                move_response.move.uci(),
+                self._offer_draw(move_response),
+                self._resign(move_response)
+            )
+
+        move, info = await self.engine.make_move(self.board, *self.engine_times)
+        self.board.push(move)
+
+        if 'score' in info:
+            self.scores.append(info['score'])
+
+        message = f'Engine:  {self._format_move(move):14} {self._format_engine_info(info)}'
+        print(message)
+        self.last_message = message
+        self.last_pv = info.get("pv", [])
+
+        return Lichess_Move(
+            move.uci(),
+            self._offer_draw(),
+            self._resign()
+        )
+
 
             if 'score' in info:
                 self.scores.append(info['score'])
