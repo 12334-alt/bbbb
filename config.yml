@@ -101,7 +101,6 @@ opening_books:
     standard_white_tournament:
       selection: best_move
       names:
-        - slowdraw
         - loser               #book for long games    
         - slowdraw            #fast draw
         - rbone
@@ -112,7 +111,6 @@ opening_books:
     standard_black_tournament:
       selection: best_move
       names:
-        - slowdraw
         - loser               #book for long games    
         - slowdraw            #fast draw
         - rbone
