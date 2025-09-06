@@ -17,7 +17,6 @@ jobs:
       - run: python filter_and_build.py
       - uses: actions/upload-artifact@v4
         with:
-          name: book
+          name: torombooks
           path: |
-            atomic_games.pgn
-            atomic_book.bin
+            torombot_draws_3000.pgn
