@@ -102,7 +102,6 @@ opening_books:
       selection: best_move
       names:
         - loser               #book for long games    
-        - rbone
         - DefaultBook
         - BackupBook
 
@@ -110,7 +109,7 @@ opening_books:
       selection: best_move
       names:
         - loser               #book for long games    
-        - rbone
+        - rbupdated
         - DefaultBook
         - BackupBook
         - BlackBook
@@ -317,4 +316,5 @@ books:                                    # Names of the opening books (to be us
   whitekingofhill: "./engines/whitekingofhill.bin"
   blackkingofhill: "./engines/blackkingofhill.bin"
   loser: "./engines/main.bin"
-  rbone: "./engines/rbone.bin"
+  rbupdated: "./engines/rbupdated.bin"
+  rbsmall: "./engines/rbsmall.bin"
