@@ -1,0 +1,39 @@
+name: Build Opening Book
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+
+jobs:
+  build-book:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 📚 Download PGNs from Elite Bots
+        run: |
+          mkdir -p pgns
+          curl -L "https://lichess.org/@/strain-on-veins/download" -o pgns/strain.pgn
+          curl -L "https://lichess.org/@/NecroMindX/download" -o pgns/necromindx.pgn
+          curl -L "https://lichess.org/@/ToromBot/download" -o pgns/torombot.pgn
+          curl -L "https://lichess.org/@/InvinxibleFlxsh/download" -o pgns/invinxible.pgn
+          curl -L "https://lichess.org/@/FayEFish/download" -o pgns/fayefish.pgn
+          curl -L "https://lichess.org/@/Fair_Bot/download" -o pgns/fairbot.pgn
+          cat pgns/*.pgn > combined.pgn
+
+      - name: 🧠 Download Polyglot Binary
+        run: |
+          curl -L -o polyglot https://github.com/bagaturchess/polyglot/releases/download/v1.0/polyglot-linux
+          chmod +x polyglot
+
+      - name: 🛠️ Build Polyglot Book
+        run: |
+          mkdir -p engines
+          ./polyglot make-book \
+            -pgn combined.pgn \
+            -bin engines/opening-book.bin \
+            -maxply 16 \
+            -min-game 1
