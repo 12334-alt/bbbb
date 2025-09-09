@@ -322,3 +322,6 @@ books:                                    # Names of the opening books (to be us
   loser: "./engines/main.bin"
   rbupdated: "./engines/rbupdated.bin"
   rbsmall: "./engines/rbsmall.bin"
+  lila: "./engines/lila.bin"
+  lilawhite: "./engines/lilawhite.bin"
+  
