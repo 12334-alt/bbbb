@@ -3,8 +3,7 @@ name: Run Bot
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */5 * * *'
-
+    - cron: '0 */5 * * *'  # Every 5 hours
 
 jobs:
   run-bot:
@@ -14,27 +13,27 @@ jobs:
       group: bot-restart
       cancel-in-progress: false
 
+    timeout-minutes: 355  # Just under GitHub's 6-hour limit
+
     env:
       TOKEN: ${{ secrets.TOKEN }}
 
     steps:
-      - name: Setup Actions
+      - name: 🧾 Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Install Python
+      - name: 🐍 Set Up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      - name: Install Requirements
-        run: |
-          pip install -r requirements.txt
+      - name: 📦 Install Requirements
+        run: pip install -r requirements.txt
 
-      - name: Fetch Token
-        run: |
-          sed -i "s/^token:.*/token: \"${TOKEN}\"/" config.yml
+      - name: 🔐 Inject Lichess Token
+        run: sed -i "s/^token:.*/token:\"${TOKEN}\"/" config.yml
 
-      - name: Download latest Stockfish dev 
+      - name: 🧠 Download Latest Stockfish
         run: |
           mkdir -p engines
           curl -L -o stockfish.zip http://abrok.eu/stockfish/latest/linux/stockfish_x64_modern.zip
@@ -43,8 +42,17 @@ jobs:
           chmod +x engines/stockfish
           chmod +x ./engines/fairy-stockfish_x86-64-bmi2
 
-      - name: Run Bot
+      - name: 🤖 Run Bot in Tournament Mode
         run: |
           echo "Starting bot..."
-          python3 -u user_interface.py "tournament HDQCs5oP" 
-          
+          python3 -u user_interface.py "tournament HDQCs5oP" &
+          PID=$!
+          ( sleep 20700 && echo "Time up. Killing bot..." && kill -SIGTERM $PID ) &
+          wait $PID
+          echo "Bot ended cleanly."
+
+      - name: 🔁 Optional Self-Restart
+        if: always()
+        run: gh workflow run run-bot.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
