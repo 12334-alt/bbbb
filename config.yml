@@ -57,7 +57,7 @@ engines:
 
 syzygy:
   standard:
-    enabled: false                        # Activate local syzygy endgame tablebases.
+    enabled: true                        # Activate local syzygy endgame tablebases.
     paths:                                # Paths to local syzygy endgame tablebases.
       - "./engines/syzygy"
     max_pieces: 7                         # Count of max pieces in the local syzygy endgame tablebases.
@@ -90,11 +90,15 @@ opening_books:
       names:
         - Optimus2502
         - Optimus4
+        - lilawhite
+        - lila
 
     standard_black:
       selection: best_move
       names:
         - BlackBook
+        - lilawhite
+        - lila
 
     standard_white_tournament_strain-on-veins:
         selection: best_move
